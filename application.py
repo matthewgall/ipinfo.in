@@ -4,7 +4,6 @@ import os
 import sys
 import json
 from bottle import route, request, response, run, template, error, default_app, HTTPResponse
-from pprint import pprint
 
 @error(404)
 def error404(error):
@@ -13,7 +12,7 @@ def error404(error):
     return 'Nothing here, sorry'
 
 @route('/headers/json')
-def asheadersjson():
+def headersJSON():
     headers = {}
     for key in request.headers.keys():
         headers[key] = request.headers.get(key)
@@ -22,7 +21,7 @@ def asheadersjson():
     return json.dumps(headers)
 
 @route('/headers')
-def asheaders():
+def headers():
     content = ""
     for key in request.headers.keys():
         content = content + "<strong>" + key + "</strong>: " + str(request.headers.get(key)) + "</br>"
@@ -31,7 +30,7 @@ def asheaders():
     return content
 
 @route('/json')
-def asjson():
+def ipJSON():
     response.content_type = 'application/json'
     content = {
         'ip': request.get('REMOTE_ADDR')
@@ -39,7 +38,7 @@ def asjson():
     return json.dumps(content)
 
 @route('/')
-def index():
+def ip():
     ip = request.get('REMOTE_ADDR')
     response.content_type = 'text/plain'
     return ip
