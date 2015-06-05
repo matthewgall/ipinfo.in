@@ -12,14 +12,23 @@ def error404(error):
     response.content_type = 'text/plain'
     return 'Nothing here, sorry'
 
-@route('/headers')
-def asheaders():
+@route('/headers/json')
+def asheadersjson():
     headers = {}
     for key in request.headers.keys():
         headers[key] = request.headers.get(key)
 
     response.content_type = 'application/json'
     return json.dumps(headers)
+
+@route('/headers')
+def asheaders():
+    content = ""
+    for key in request.headers.keys():
+        content = content + "<strong>" + key + "</strong>: " + str(request.headers.get(key)) + "</br>"
+
+    response.content_type = 'text/html'
+    return content
 
 @route('/json')
 def asjson():
