@@ -32,14 +32,22 @@ def headers():
 @route('/json')
 def ipJSON():
     response.content_type = 'application/json'
+    if request.headers.get('Cf-Connecting-Ip') != None:
+        ip = request.headers.get('Cf-Connecting-Ip')
+    else:
+        ip = request.get('REMOTE_ADDR')
+
     content = {
-        'ip': request.get('REMOTE_ADDR')
+        'ip': ip
     }
     return json.dumps(content)
 
 @route('/')
 def ip():
-    ip = request.get('REMOTE_ADDR')
+    if request.headers.get('Cf-Connecting-Ip') != None:
+        ip = request.headers.get('Cf-Connecting-Ip')
+    else:
+        ip = request.get('REMOTE_ADDR')
     response.content_type = 'text/plain'
     return ip
 
