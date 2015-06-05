@@ -3,7 +3,8 @@
 import os
 import sys
 import json
-from bottle import route, request, run, response, template, error, default_app, HTTPResponse
+from bottle import route, request, response, run, template, error, default_app, HTTPResponse
+from pprint import pprint
 
 @error(404)
 def error404(error):
@@ -11,17 +12,28 @@ def error404(error):
     response.content_type = 'text/plain'
     return 'Nothing here, sorry'
 
-@route('/json')
-def json():
-    ip = request.get('REMOTE_ADDR')
+@route('/headers')
+def asheaders():
+    headers = {}
+    for key in request.headers.keys():
+        headers[key] = request.headers.get(key)
+
     response.content_type = 'application/json'
-    return template('json', ip=ip)
+    return json.dumps(headers)
+
+@route('/json')
+def asjson():
+    response.content_type = 'application/json'
+    content = {
+        'ip': request.get('REMOTE_ADDR')
+    }
+    return json.dumps(content)
 
 @route('/')
 def index():
     ip = request.get('REMOTE_ADDR')
     response.content_type = 'text/plain'
-    return template("{{ip}}", ip=ip)
+    return ip
 
 if __name__ == '__main__':
 
