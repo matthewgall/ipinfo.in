@@ -4,7 +4,7 @@ FROM ubuntu:trusty
 RUN sudo apt-get clean && sudo apt-get update && sudo apt-get -y install python python-dev python-pip git
 
 # Install app dependencies
-RUN cd /src; git clone https://github.com/matthewgall/ipinfo.in.git .; pip install -r requirements.txt
+RUN cd /src; git pull; pip install -r requirements.txt
 
 # By default, the app listens on port 5000
 EXPOSE 5000
