@@ -3,7 +3,9 @@
 import os
 import sys
 import json
+from random import randint
 from bottle import route, request, response, run, template, error, default_app, HTTPResponse
+import pydenticon
 
 def getIPAddress():
     if request.headers.get('Cf-Connecting-Ip') != None:
@@ -27,6 +29,16 @@ def getVersion():
     content = f.read()
     response.content_type = 'text/plain'
     return content
+
+@route('/icon')
+def getIcon():
+    response.content_type = 'image/png'
+    colors = []
+    for _ in range(8):
+        colors.append("rgb(" + str(randint(1,255)) + "," + str(randint(1,255)) + "," + str(randint(1,255)) + ")")
+    generator = pydenticon.Generator(8,8,foreground=colors)
+    identicon = generator.generate(getIPAddress(), 100, 100)
+    return identicon
 
 @route('/headers/json')
 def headersJSON():
