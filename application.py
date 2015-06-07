@@ -5,6 +5,16 @@ import sys
 import json
 from bottle import route, request, response, run, template, error, default_app, HTTPResponse
 
+def getIPAddress():
+    if request.headers.get('Cf-Connecting-Ip') != None:
+        ip = request.headers.get('Cf-Connecting-Ip')
+    else:
+        ip = request.get('REMOTE_ADDR')
+    return ip
+
+def getRequestHeaders():
+    return request.headers.keys()
+
 @error(404)
 def error404(error):
     response.status = 404
@@ -14,7 +24,7 @@ def error404(error):
 @route('/headers/json')
 def headersJSON():
     headers = {}
-    for key in request.headers.keys():
+    for key in getRequestHeaders():
         headers[key] = request.headers.get(key)
 
     response.content_type = 'application/json'
@@ -23,7 +33,7 @@ def headersJSON():
 @route('/headers')
 def headers():
     content = ""
-    for key in request.headers.keys():
+    for key in getRequestHeaders():
         content = content + "<strong>" + key + "</strong>: " + str(request.headers.get(key)) + "</br>"
 
     response.content_type = 'text/html'
@@ -31,25 +41,16 @@ def headers():
 
 @route('/json')
 def ipJSON():
-    response.content_type = 'application/json'
-    if request.headers.get('Cf-Connecting-Ip') != None:
-        ip = request.headers.get('Cf-Connecting-Ip')
-    else:
-        ip = request.get('REMOTE_ADDR')
-
     content = {
-        'ip': ip
+        'ip': getIPAddress()
     }
+    response.content_type = 'application/json'
     return json.dumps(content)
 
 @route('/')
 def ip():
-    if request.headers.get('Cf-Connecting-Ip') != None:
-        ip = request.headers.get('Cf-Connecting-Ip')
-    else:
-        ip = request.get('REMOTE_ADDR')
     response.content_type = 'text/plain'
-    return ip
+    return getIPAddress()
 
 if __name__ == '__main__':
 
