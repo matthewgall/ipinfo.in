@@ -21,6 +21,13 @@ def error404(error):
     response.content_type = 'text/plain'
     return 'Nothing here, sorry'
 
+@route('/version')
+def getVersion():
+    f = open('.git/refs/heads/master', 'r')
+    content = f.read()
+    response.content_type = 'text/plain'
+    return content
+
 @route('/headers/json')
 def headersJSON():
     headers = {}
