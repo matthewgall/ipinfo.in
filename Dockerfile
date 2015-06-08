@@ -1,7 +1,7 @@
 FROM ubuntu:trusty
 
 # Install python, python-dev, pip and git (and associated tools)
-RUN sudo apt-get clean && sudo apt-get update && sudo apt-get -y install python python-dev python-pip git
+RUN sudo apt-get clean && sudo apt-get update && sudo apt-get -y install python python-dev python-pip zlibc zlib1g zlib1g-dev
 
 # Bundle app source
 COPY . /src
