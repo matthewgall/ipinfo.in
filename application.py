@@ -10,6 +10,8 @@ import pydenticon
 def getIPAddress():
     if request.headers.get('Cf-Connecting-Ip') != None:
         ip = request.headers.get('Cf-Connecting-Ip')
+    elif request.headers.get('X-Forwarded-For') != None:
+        ip = request.headers.get('X-Forwarded-For')
     else:
         ip = request.get('REMOTE_ADDR')
     return ip
