@@ -44,36 +44,32 @@ def getIcon(height=100,width=100):
     identicon = generator.generate(getIPAddress(), height, width)
     return identicon
 
-@route('/headers/json')
-def headersJSON():
-    headers = {}
-    for key in getRequestHeaders():
-        headers[key] = request.headers.get(key)
-
-    response.content_type = 'application/json'
-    return json.dumps(headers)
-
 @route('/headers')
 def headers():
-    content = ""
-    for key in getRequestHeaders():
-        content = content + "<strong>" + key + "</strong>: " + str(request.headers.get(key)) + "</br>"
-
-    response.content_type = 'text/html'
-    return content
-
-@route('/json')
-def ipJSON():
-    content = {
-        'ip': getIPAddress()
-    }
-    response.content_type = 'application/json'
-    return json.dumps(content)
+    if request.headers.get('Accept') == "application/json":
+        content = {}
+        for key in getRequestHeaders():
+            content[key] = request.headers.get(key)
+        response.content_type = 'application/json'
+        return json.dumps(content)
+    else:
+        content = ""
+        for key in getRequestHeaders():
+            content = content + "<strong>" + key + "</strong>: " + str(request.headers.get(key)) + "</br>"
+        response.content_type = 'text/html'
+        return content
 
 @route('/')
 def ip():
-    response.content_type = 'text/plain'
-    return getIPAddress()
+    if request.headers.get('Accept') == "application/json":
+        content = {
+            'ip': getIPAddress()
+        }
+        response.content_type = 'application/json'
+        return json.dumps(content)
+    else:
+        response.content_type = 'text/plain'
+        return getIPAddress()
 
 if __name__ == '__main__':
 
