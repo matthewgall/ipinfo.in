@@ -45,8 +45,10 @@ def getIcon(height=100,width=100):
     return identicon
 
 @route('/headers')
+@route('/headers.json')
 def headers():
-    if request.headers.get('Accept') == "application/json":
+    if request.headers.get('Accept') == "application/json" \
+    or request.path.endswith('.json'):
         content = {}
         for key in getRequestHeaders():
             content[key] = request.headers.get(key)
@@ -60,8 +62,10 @@ def headers():
         return content
 
 @route('/')
+@route('/ip.json')
 def ip():
-    if request.headers.get('Accept') == "application/json":
+    if request.headers.get('Accept') == "application/json" \
+    or request.path.endswith('.json'):
         content = {
             'ip': getIPAddress()
         }
