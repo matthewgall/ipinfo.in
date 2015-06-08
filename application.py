@@ -62,6 +62,7 @@ def headers():
         return content
 
 @route('/')
+@route('/ip')
 @route('/ip.json')
 def ip():
     if request.headers.get('Accept') == "application/json" \
