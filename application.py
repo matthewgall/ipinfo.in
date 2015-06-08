@@ -33,13 +33,15 @@ def getVersion():
     return content
 
 @route('/icon')
-def getIcon():
+@route('/icon/<height:int>')
+@route('/icon/<height:int>/<width:int>')
+def getIcon(height=100,width=100):
     response.content_type = 'image/png'
     colors = []
     for _ in range(8):
         colors.append("rgb(" + str(randint(1,255)) + "," + str(randint(1,255)) + "," + str(randint(1,255)) + ")")
     generator = pydenticon.Generator(8,8,foreground=colors)
-    identicon = generator.generate(getIPAddress(), 100, 100)
+    identicon = generator.generate(getIPAddress(), height, width)
     return identicon
 
 @route('/headers/json')
