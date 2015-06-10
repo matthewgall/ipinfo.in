@@ -19,6 +19,13 @@ def getIPAddress():
 def getRequestHeaders():
     return request.headers.keys()
 
+def isJSONResponse():
+    if request.headers.get('Accept') == "application/json" \
+    or request.path.endswith('.json'):
+        return true
+    else:
+        return false
+
 @error(404)
 def error404(error):
     response.status = 404
@@ -47,8 +54,7 @@ def getIcon(height=100,width=100):
 @route('/headers')
 @route('/headers.json')
 def headers():
-    if request.headers.get('Accept') == "application/json" \
-    or request.path.endswith('.json'):
+    if isJSONResponse():
         content = {}
         for key in getRequestHeaders():
             content[key] = request.headers.get(key)
@@ -65,8 +71,7 @@ def headers():
 @route('/ip')
 @route('/ip.json')
 def ip():
-    if request.headers.get('Accept') == "application/json" \
-    or request.path.endswith('.json'):
+    if isJSONResponse():
         content = {
             'ip': getIPAddress()
         }
