@@ -23,8 +23,6 @@ def isJSONResponse():
     if request.headers.get('Accept') == "application/json" \
     or request.path.endswith('.json'):
         return True
-    else:
-        return False
 
 @error(404)
 def error404(error):
