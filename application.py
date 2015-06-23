@@ -22,9 +22,9 @@ def getRequestHeaders():
 def isJSONResponse():
     if request.headers.get('Accept') == "application/json" \
     or request.path.endswith('.json'):
-        return true
+        return True
     else:
-        return false
+        return False
 
 @error(404)
 def error404(error):
@@ -45,7 +45,7 @@ def getVersion():
 def getIcon(height=100,width=100):
     response.content_type = 'image/png'
     colors = []
-    for _ in range(8):
+    for _ in range(2):
         colors.append("rgb(" + str(randint(1,255)) + "," + str(randint(1,255)) + "," + str(randint(1,255)) + ")")
     generator = pydenticon.Generator(8,8,foreground=colors)
     identicon = generator.generate(getIPAddress(), height, width)
