@@ -10,7 +10,7 @@ Deploying ipinfo.in is easy using Docker:
 
     docker run -p 80:5000 matthewgall/ipinfo.in
 
-Honestly, that simple!
+Honestly, that simple (and none of that one line wget direct to your terminal)
 
 ## Licence
 
