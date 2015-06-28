@@ -5,6 +5,7 @@ import sys
 import json
 from random import randint
 from bottle import route, request, response, run, template, error, default_app, HTTPResponse
+from dicttoxml import dicttoxml
 import pydenticon
 
 def getIPAddress():
@@ -22,6 +23,13 @@ def getRequestHeaders():
 def isJSONResponse():
     if request.headers.get('Accept') == "application/json" \
     or request.path.endswith('.json'):
+        response.content_type = 'application/json'
+        return True
+
+def isXMLResponse():
+    if request.headers.get('Accept') == "application/xml" \
+    or request.path.endswith('.xml'):
+        response.content_type = 'application/xml'
         return True
 
 @error(404)
@@ -51,13 +59,18 @@ def getIcon(height=100,width=100):
 
 @route('/headers')
 @route('/headers.json')
+@route('/headers.xml')
 def headers():
     if isJSONResponse():
         content = {}
         for key in getRequestHeaders():
             content[key] = request.headers.get(key)
-        response.content_type = 'application/json'
         return json.dumps(content)
+    if isXMLResponse():
+        content = {}
+        for key in getRequestHeaders():
+            content[key] = request.headers.get(key)
+        return dicttoxml(content)
     else:
         content = ""
         for key in getRequestHeaders():
@@ -68,13 +81,18 @@ def headers():
 @route('/')
 @route('/ip')
 @route('/ip.json')
+@route('/ip.xml')
 def ip():
     if isJSONResponse():
         content = {
             'ip': getIPAddress()
         }
-        response.content_type = 'application/json'
         return json.dumps(content)
+    elif isXMLResponse():
+        content = {
+            'ip': getIPAddress()
+        }
+        return dicttoxml(content)
     else:
         response.content_type = 'text/plain'
         return getIPAddress()
