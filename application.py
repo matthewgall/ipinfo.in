@@ -40,7 +40,8 @@ def error404(error):
 
 @route('/version')
 def getVersion():
-    f = open(os.getenv('VERSION_PATH', '.git/refs/heads/master'), 'r')
+    dirname, filename = os.path.split(os.path.abspath(__file__))
+    f = open(os.getenv('VERSION_PATH', dirname + '/.git/refs/heads/master'), 'r')
     content = f.read()
     response.content_type = 'text/plain'
     return content
