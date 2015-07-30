@@ -106,7 +106,7 @@ if __name__ == '__main__':
     application = default_app()
 
     serverHost = os.getenv('SERVER_HOST', 'localhost')
-    serverPort = os.getenv('PORT', '5000')
+    serverPort = os.getenv('SERVER_PORT', '5000')
 
     # Now we're ready, so start the server
     try:
