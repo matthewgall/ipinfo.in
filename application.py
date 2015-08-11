@@ -20,6 +20,10 @@ def getIPAddress():
 def getRequestHeaders():
     return request.headers.keys()
 
+def addHeadersToAllRequests():
+    response.set_header('X-Contact-The-Author', 'themaster@ipinfo.in')
+    return True
+
 def isJSONResponse():
     if request.headers.get('Accept') == "application/json" \
     or request.path.endswith('.json'):
@@ -40,6 +44,7 @@ def error404(error):
 
 @route('/version')
 def getVersion():
+    addHeadersToAllRequests()
     try:
         dirname, filename = os.path.split(os.path.abspath(__file__))
         f = open(os.getenv('VERSION_PATH', dirname + '/.git/refs/heads/master'), 'r')
@@ -53,6 +58,7 @@ def getVersion():
 @route('/icon/<height:int>')
 @route('/icon/<height:int>/<width:int>')
 def getIcon(height=100,width=100):
+    addHeadersToAllRequests()
     response.content_type = 'image/png'
     colors = []
     for _ in range(2):
@@ -65,6 +71,7 @@ def getIcon(height=100,width=100):
 @route('/headers.json')
 @route('/headers.xml')
 def headers():
+    addHeadersToAllRequests()
     if isJSONResponse():
         content = {}
         for key in getRequestHeaders():
@@ -87,6 +94,7 @@ def headers():
 @route('/ip.json')
 @route('/ip.xml')
 def ip():
+    addHeadersToAllRequests()
     if isJSONResponse():
         content = {
             'ip': getIPAddress()
