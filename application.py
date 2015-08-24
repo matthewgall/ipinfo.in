@@ -3,6 +3,7 @@
 import os
 import sys
 import json
+import socket
 from random import randint
 from bottle import route, request, response, run, template, error, default_app, HTTPResponse
 from dicttoxml import dicttoxml
@@ -17,6 +18,12 @@ def getIPAddress():
         ip = request.get('REMOTE_ADDR')
     return ip
 
+def getReverseHost():
+    try:
+        return socket.gethostbyaddr(getIPAddress())[0]
+    except:
+        return "Unable to resolve IP address to reverse hostname"
+    
 def getRequestHeaders():
     return request.headers.keys()
 
@@ -72,15 +79,12 @@ def getIcon(height=100,width=100):
 @route('/headers.xml')
 def headers():
     addHeadersToAllRequests()
+    content = {}
+    for key in getRequestHeaders():
+        content[key] = request.headers.get(key)
     if isJSONResponse():
-        content = {}
-        for key in getRequestHeaders():
-            content[key] = request.headers.get(key)
         return json.dumps(content)
     if isXMLResponse():
-        content = {}
-        for key in getRequestHeaders():
-            content[key] = request.headers.get(key)
         return dicttoxml(content)
     else:
         content = ""
@@ -89,21 +93,34 @@ def headers():
         response.content_type = 'text/html'
         return content
 
+@route('/reverse')
+@route('/reverse.json')
+@route('/reverse.xml')
+def reverse():
+    addHeadersToAllRequests()
+    content = {
+        'reverse': getReverseHost()
+    }
+    if isJSONResponse():
+        return json.dumps(content)
+    elif isXMLResponse():
+        return dicttoxml(content)
+    else:
+        response.content_type = 'text/plain'
+        return getReverseHost()
+
 @route('/')
 @route('/ip')
 @route('/ip.json')
 @route('/ip.xml')
 def ip():
     addHeadersToAllRequests()
+    content = {
+        'ip': getIPAddress()
+    }
     if isJSONResponse():
-        content = {
-            'ip': getIPAddress()
-        }
         return json.dumps(content)
     elif isXMLResponse():
-        content = {
-            'ip': getIPAddress()
-        }
         return dicttoxml(content)
     else:
         response.content_type = 'text/plain'
