@@ -136,6 +136,6 @@ if __name__ == '__main__':
 
     # Now we're ready, so start the server
     try:
-        application.run(host=serverHost, port=serverPort)
+        application.run(host=serverHost, port=serverPort, quiet=True)
     finally:
         exit()
