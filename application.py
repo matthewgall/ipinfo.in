@@ -131,7 +131,7 @@ if __name__ == '__main__':
 
     application = default_app()
 
-    serverEnv = os.getenv('ENVIRONMENT', 'production')
+    serverEnv = os.getenv('ENV', 'production')
     serverHost = os.getenv('SERVER_HOST', 'localhost')
     serverPort = os.getenv('SERVER_PORT', '5000')
 
