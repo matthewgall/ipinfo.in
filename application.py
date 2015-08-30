@@ -10,11 +10,14 @@ from dicttoxml import dicttoxml
 import pydenticon
 
 def getIPAddress():
-    if request.headers.get('Cf-Connecting-Ip') != None:
-        return request.headers.get('Cf-Connecting-Ip')
-    elif request.headers.get('X-Forwarded-For') != None:
-        return request.headers.get('X-Forwarded-For')
-    else:
+    try:
+        if request.headers.get('Cf-Connecting-Ip') == None and request.headers.get('X-Forwarded-For') == None:
+            raise TypeError
+        elif request.headers.get('Cf-Connecting-Ip') != None:
+            return request.headers.get('Cf-Connecting-Ip')
+        else:
+            return request.headers.get('X-Forwarded-For')
+    except TypeError:
         return request.get('REMOTE_ADDR')
 
 def getReverseHost():
