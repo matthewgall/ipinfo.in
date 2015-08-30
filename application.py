@@ -131,11 +131,15 @@ if __name__ == '__main__':
 
     application = default_app()
 
+    serverEnv = os.getenv('ENVIRONMENT', 'production')
     serverHost = os.getenv('SERVER_HOST', 'localhost')
     serverPort = os.getenv('SERVER_PORT', '5000')
 
     # Now we're ready, so start the server
     try:
-        application.run(host=serverHost, port=serverPort, quiet=True)
+        if serverEnv in ["production", "prod"]:
+            application.run(host=serverHost, port=serverPort, quiet=True)
+        else:
+            application.run(host=serverHost, port=serverPort)
     finally:
         exit()
