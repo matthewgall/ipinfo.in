@@ -5,18 +5,17 @@ import sys
 import json
 import socket
 from random import randint
-from bottle import route, request, response, run, template, error, default_app, HTTPResponse
+from bottle import route, request, response, run, error, default_app, HTTPResponse
 from dicttoxml import dicttoxml
 import pydenticon
 
 def getIPAddress():
     if request.headers.get('Cf-Connecting-Ip') != None:
-        ip = request.headers.get('Cf-Connecting-Ip')
+        return request.headers.get('Cf-Connecting-Ip')
     elif request.headers.get('X-Forwarded-For') != None:
-        ip = request.headers.get('X-Forwarded-For')
+        return request.headers.get('X-Forwarded-For')
     else:
-        ip = request.get('REMOTE_ADDR')
-    return ip
+        return request.get('REMOTE_ADDR')
 
 def getReverseHost():
     try:
@@ -68,8 +67,7 @@ def getIcon(height=100,width=100):
     addHeadersToAllRequests()
     response.content_type = 'image/png'
     colors = []
-    for _ in range(2):
-        colors.append("rgb(" + str(randint(1,255)) + "," + str(randint(1,255)) + "," + str(randint(1,255)) + ")")
+    colors.append("rgb(" + str(randint(1,255)) + "," + str(randint(1,255)) + "," + str(randint(1,255)) + ")")
     generator = pydenticon.Generator(8,8,foreground=colors)
     identicon = generator.generate(getIPAddress(), height, width)
     return identicon
