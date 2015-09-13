@@ -80,9 +80,11 @@ def getIcon(height=100,width=100):
 @route('/headers.xml')
 def headers():
     addHeadersToAllRequests()
-    content = {}
+    content = {
+        "results": {}
+    }
     for key in getRequestHeaders():
-        content[key] = request.headers.get(key)
+        content["results"][key] = request.headers.get(key)
     if isJSONResponse():
         return json.dumps(content)
     if isXMLResponse():
@@ -100,7 +102,9 @@ def headers():
 def reverse():
     addHeadersToAllRequests()
     content = {
-        'reverse': getReverseHost()
+        "results": {
+            'reverse': getReverseHost()
+        }
     }
     if isJSONResponse():
         return json.dumps(content)
@@ -117,7 +121,9 @@ def reverse():
 def ip():
     addHeadersToAllRequests()
     content = {
-        'ip': getIPAddress()
+        "results": {
+            'ip': getIPAddress()
+        }
     }
     if isJSONResponse():
         return json.dumps(content)
