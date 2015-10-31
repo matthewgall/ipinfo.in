@@ -1,16 +1,22 @@
-FROM ubuntu:trusty
+FROM gliderlabs/alpine:latest
 
-# Install python, python-dev, pip and git (and associated tools)
-RUN sudo apt-get clean && sudo apt-get update && sudo apt-get -y install python python-dev python-pip zlibc zlib1g zlib1g-dev
+RUN apk add --update \
+	python \
+	python-dev \
+	py-pip \
+	py-virtualenv \
+	build-base \
+	zlib-dev \
+	libjpeg-turbo-dev \
+	libpng-dev \
+	&& rm -rf /var/cache/apk/* \
+	&& ln -s /lib/libz.a /usr/lib/libz.a \
+	&& ln -s /lib/libz.so /usr/lib/libz.so
 
-# Bundle app source
-COPY . /src
+WORKDIR /app
 
-# Install app dependencies
-RUN cd /src; pip install -r requirements.txt
+COPY . /app
+RUN virtualenv /env && /env/bin/pip install -r /app/requirements.txt
 
-# By default, the app listens on port 5000
 EXPOSE 5000
-
-# And now, we execute it
-CMD ["/src/start_docker.sh"]
+CMD ["/env/bin/python", "application.py"]
