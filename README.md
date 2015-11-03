@@ -1,5 +1,7 @@
 # ipinfo.in
 
+[![](https://badge.imagelayers.io/matthewgall/ipinfo.in:latest.svg)]
+
 Ever wanted to run your own IP lookup service like [canhazip.com](http://canhazip.com), [ifconfig.me](http://ifconfig.me) or [myip.dnsomatic.com](http://myip.dnsomatic.com) but without the annoying PHP? Something easy to deploy, and lightening fast!
 
 ## Introducing ipinfo.in
