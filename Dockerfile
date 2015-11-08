@@ -1,5 +1,4 @@
-FROM matthewgall/python-dev:master
-
+FROM matthewgall/python-dev:latest
 RUN apk add --update \
 	zlib-dev \
 	libjpeg-turbo-dev \
