@@ -1,11 +1,6 @@
-FROM gliderlabs/alpine:latest
+FROM matthewgall/python-dev:master
 
 RUN apk add --update \
-	python \
-	python-dev \
-	py-pip \
-	py-virtualenv \
-	build-base \
 	zlib-dev \
 	libjpeg-turbo-dev \
 	libpng-dev \
