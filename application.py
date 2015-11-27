@@ -5,7 +5,7 @@ import json
 import socket
 import logging
 from random import randint
-from bottle import route, request, response, run, error, default_app
+from bottle import route, request, response, error, default_app
 from logentries import LogentriesHandler
 from dicttoxml import dicttoxml
 import pydenticon
@@ -149,7 +149,7 @@ def ip():
 
 if __name__ == '__main__':
 
-    application = default_app()
+    app = default_app()
 
     serverHost = os.getenv('SERVER_HOST', 'localhost')
     serverPort = os.getenv('SERVER_PORT', '5000')
@@ -167,6 +167,6 @@ if __name__ == '__main__':
     # Now we're ready, so start the server
     try:
         log.info("Successfully started application server on " + socket.gethostname())
-        application.run(host=serverHost, port=serverPort)
+        app.run(host=serverHost, port=serverPort)
     except:
         log.info("Failed to start application server on " + socket.gethostname())
