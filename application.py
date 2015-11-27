@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 
 import os
-import sys
 import json
 import socket
 import logging
 from random import randint
-from bottle import route, request, response, run, error, default_app, HTTPResponse
+from bottle import route, request, response, run, error, default_app
 from logentries import LogentriesHandler
 from dicttoxml import dicttoxml
 import pydenticon
@@ -82,7 +81,7 @@ def getIcon(height=100,width=100):
 	addHeadersToAllRequests()
 	response.content_type = 'image/png'
 	colors = []
-	colors.append("rgb(" + str(randint(1,255)) + "," + str(randint(1,255)) + "," + str(randint(1,255)) + ")")
+	colors.append("rgb(" + str(randint(1, 255)) + "," + str(randint(1, 255)) + "," + str(randint(1, 255)) + ")")
 	generator = pydenticon.Generator(8,8,foreground=colors)
 	identicon = generator.generate(getIPAddress(), height, width)
 	return identicon
