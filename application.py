@@ -10,7 +10,7 @@ from logentries import LogentriesHandler
 from dicttoxml import dicttoxml
 import pydenticon
 
-def getIPAddress():
+def get_ipaddress():
     try:
         if request.headers.get('Cf-Connecting-Ip') == None and request.headers.get('X-Forwarded-For') == None:
             raise TypeError
@@ -21,35 +21,35 @@ def getIPAddress():
     except TypeError:
         return request.get('REMOTE_ADDR')
 
-def getReverseHost():
+def get_reverse_host():
     try:
-        return socket.gethostbyaddr(getIPAddress())[0]
+        return socket.gethostbyaddr(get_ipaddress())[0]
     except:
         return "Unable to resolve IP address to reverse hostname"
     
-def getRequestHeaders():
+def get_request_headers():
     return request.headers.keys()
 
-def addHeadersToAllRequests():
+def add_headers():
     response.set_header('X-ContactTheAuthor', 'themaster@ipinfo.in')
     return True
 
-def buildContentResponse(content):
+def build_content_response(content):
     # First, we're going to add our headers as needed
-    addHeadersToAllRequests()
+    add_headers()
     # And define a default dictionary
     content = {
         "results": ""
     }
     return content
 
-def isJSONResponse():
+def is_json_response():
     if request.headers.get('Accept') == "application/json" \
     or request.path.endswith('.json'):
         response.content_type = 'application/json'
         return True
 
-def isXMLResponse():
+def is_xml_response():
     if request.headers.get('Accept') == "application/xml" \
     or request.path.endswith('.xml'):
         response.content_type = 'application/xml'
@@ -57,16 +57,17 @@ def isXMLResponse():
 
 @route('favicon.ico')
 @error(404)
-def error404(error):
+def error_404(error):
     response.status = 404
     response.content_type = 'text/plain'
     return 'Nothing here, sorry'
 
 @route('/version')
-def getVersion():
-    addHeadersToAllRequests()
+def get_version():
+    add_headers()
     try:
         dirname, filename = os.path.split(os.path.abspath(__file__))
+        del filename
         f = open(os.getenv('VERSION_PATH', dirname + '/.git/refs/heads/master'), 'r')
         content = f.read()
         response.content_type = 'text/plain'
@@ -77,13 +78,13 @@ def getVersion():
 @route('/icon')
 @route('/icon/<height:int>')
 @route('/icon/<height:int>/<width:int>')
-def getIcon(height=100, width=100):
-    addHeadersToAllRequests()
+def get_icon(height=100, width=100):
+    add_headers()
     response.content_type = 'image/png'
     colors = []
     colors.append("rgb(" + str(randint(1, 255)) + "," + str(randint(1, 255)) + "," + str(randint(1, 255)) + ")")
     generator = pydenticon.Generator(8, 8, foreground=colors)
-    identicon = generator.generate(getIPAddress(), height, width)
+    identicon = generator.generate(get_ipaddress(), height, width)
     return identicon
 
 @route('/headers')
@@ -93,15 +94,15 @@ def headers():
     content = {
         "results": {}
     }
-    for key in getRequestHeaders():
+    for key in get_request_headers():
         content["results"][key] = request.headers.get(key)
-    if isJSONResponse():
+    if is_json_response():
         return json.dumps(content)
-    if isXMLResponse():
+    if is_xml_response():
         return dicttoxml(content)
     else:
         content = ""
-        for key in getRequestHeaders():
+        for key in get_request_headers():
             content = content + "<strong>" + key + "</strong>: " + str(request.headers.get(key)) + "</br>"
         response.content_type = 'text/html'
         return content
@@ -110,38 +111,38 @@ def headers():
 @route('/reverse.json')
 @route('/reverse.xml')
 def reverse():
-    addHeadersToAllRequests()
+    add_headers()
     content = {
         "results": {
-            'reverse': getReverseHost()
+            'reverse': get_reverse_host()
         }
     }
-    if isJSONResponse():
+    if is_json_response():
         return json.dumps(content)
-    elif isXMLResponse():
+    elif is_xml_response():
         return dicttoxml(content)
     else:
         response.content_type = 'text/plain'
-        return getReverseHost()
+        return get_reverse_host()
 
 @route('/')
 @route('/ip')
 @route('/ip.json')
 @route('/ip.xml')
 def ip():
-    addHeadersToAllRequests()
+    add_headers()
     content = {
         "results": {
-            'ip': getIPAddress()
+            'ip': get_ipaddress()
         }
     }
-    if isJSONResponse():
+    if is_json_response():
         return json.dumps(content)
-    elif isXMLResponse():
+    elif is_xml_response():
         return dicttoxml(content)
     else:
         response.content_type = 'text/plain'
-        return getIPAddress()
+        return get_ipaddress()
 
 if __name__ == '__main__':
 
