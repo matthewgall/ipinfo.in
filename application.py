@@ -12,7 +12,8 @@ import pydenticon
 
 def get_ipaddress():
     try:
-        if request.headers.get('Cf-Connecting-Ip') == None and request.headers.get('X-Forwarded-For') == None:
+        if request.headers.get('Cf-Connecting-Ip') == None \
+        and request.headers.get('X-Forwarded-For') == None:
             raise TypeError
         elif request.headers.get('Cf-Connecting-Ip') != None:
             return request.headers.get('Cf-Connecting-Ip')
@@ -82,7 +83,9 @@ def get_icon(height=100, width=100):
     add_headers()
     response.content_type = 'image/png'
     colors = []
-    colors.append("rgb(" + str(randint(1, 255)) + "," + str(randint(1, 255)) + "," + str(randint(1, 255)) + ")")
+    colors.append("rgb(" + str(randint(1, 255)) \
+        + "," + str(randint(1, 255)) \
+        + "," + str(randint(1, 255)) + ")")
     generator = pydenticon.Generator(8, 8, foreground=colors)
     identicon = generator.generate(get_ipaddress(), height, width)
     return identicon
