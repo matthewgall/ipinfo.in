@@ -77,12 +77,12 @@ def getVersion():
 @route('/icon')
 @route('/icon/<height:int>')
 @route('/icon/<height:int>/<width:int>')
-def getIcon(height=100,width=100):
+def getIcon(height=100, width=100):
     addHeadersToAllRequests()
     response.content_type = 'image/png'
     colors = []
     colors.append("rgb(" + str(randint(1, 255)) + "," + str(randint(1, 255)) + "," + str(randint(1, 255)) + ")")
-    generator = pydenticon.Generator(8,8,foreground=colors)
+    generator = pydenticon.Generator(8, 8, foreground=colors)
     identicon = generator.generate(getIPAddress(), height, width)
     return identicon
 
