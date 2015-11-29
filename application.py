@@ -11,6 +11,7 @@ from dicttoxml import dicttoxml
 import pydenticon
 
 def get_ipaddress():
+    """Return the IP address of the visitor to the calling function."""
     try:
         if request.headers.get('Cf-Connecting-Ip') == None \
         and request.headers.get('X-Forwarded-For') == None:
@@ -23,19 +24,23 @@ def get_ipaddress():
         return request.get('REMOTE_ADDR')
 
 def get_reverse_host():
+    """Return the reverse hostname of the IP address to the calling function."""
     try:
         return socket.gethostbyaddr(get_ipaddress())[0]
     except:
         return "Unable to resolve IP address to reverse hostname"
-    
+
 def get_request_headers():
+    """Return an array of headers used to make the request to the calling function."""
     return request.headers.keys()
 
 def add_headers():
+    """Added a set of headers to all responses from the application."""
     response.set_header('X-ContactTheAuthor', 'themaster@ipinfo.in')
     return True
 
 def build_content_response(content):
+    """Builds a content response."""
     # First, we're going to add our headers as needed
     add_headers()
     # And define a default dictionary
@@ -106,7 +111,8 @@ def headers():
     else:
         content = ""
         for key in get_request_headers():
-            content = content + "<strong>" + key + "</strong>: " + str(request.headers.get(key)) + "</br>"
+            content = content + "<strong>" + key + "</strong>: " \
+                + str(request.headers.get(key)) + "</br>"
         response.content_type = 'text/html'
         return content
 
