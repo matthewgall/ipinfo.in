@@ -5,7 +5,7 @@ import json
 import socket
 import logging
 from random import randint
-from bottle import route, request, response, error, default_app
+from bottle import route, request, response, error, hook, default_app
 from logentries import LogentriesHandler
 from dicttoxml import dicttoxml
 import pydenticon
@@ -34,15 +34,13 @@ def get_request_headers():
     """Return an array of headers used to make the request to the calling function."""
     return request.headers.keys()
 
+@hook('after_request')
 def add_headers():
     """Added a set of headers to all responses from the application."""
-    response.set_header('X-ContactTheAuthor', 'themaster@ipinfo.in')
-    return True
+    response.set_header('X-Contact', 'themaster@ipinfo.in')
 
 def build_content_response(content):
     """Builds a content response."""
-    # First, we're going to add our headers as needed
-    add_headers()
     # And define a default dictionary
     content = {
         "results": ""
@@ -70,7 +68,6 @@ def error_404(error):
 
 @route('/version')
 def get_version():
-    add_headers()
     try:
         dirname, filename = os.path.split(os.path.abspath(__file__))
         del filename
@@ -85,7 +82,6 @@ def get_version():
 @route('/icon/<height:int>')
 @route('/icon/<height:int>/<width:int>')
 def get_icon(height=100, width=100):
-    add_headers()
     response.content_type = 'image/png'
     colors = []
     colors.append("rgb(" + str(randint(1, 255)) \
@@ -120,7 +116,6 @@ def headers():
 @route('/reverse.json')
 @route('/reverse.xml')
 def reverse():
-    add_headers()
     content = {
         "results": {
             'reverse': get_reverse_host()
@@ -139,7 +134,6 @@ def reverse():
 @route('/ip.json')
 @route('/ip.xml')
 def ip():
-    add_headers()
     content = {
         "results": {
             'ip': get_ipaddress()
