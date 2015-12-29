@@ -4,10 +4,10 @@ import os
 import json
 import socket
 import logging
-from random import randint
 from bottle import route, request, response, error, hook, default_app
 from logentries import LogentriesHandler
 from dicttoxml import dicttoxml
+from IPy import IP
 import pydenticon
 
 def get_ipaddress():
@@ -83,10 +83,26 @@ def get_version():
 @route('/icon/<height:int>/<width:int>')
 def get_icon(height=100, width=100):
     response.content_type = 'image/png'
+    address = IP(get_ipaddress())
+    values = []
+    if address.version() == 6:
+        address = str(address).split(":")
+        for ochet in address:
+            if ochet == '':
+                values.append("0")
+            elif int(ochet) >= 255:
+                values.append("255")
+            else:
+                values.append(ochet)
+    else:
+        address = str(address).split(".")
+        for ochet in address:
+            values.append(ochet)
+
     colors = []
-    colors.append("rgb(" + str(randint(1, 255)) \
-        + "," + str(randint(1, 255)) \
-        + "," + str(randint(1, 255)) + ")")
+    colors.append("rgb(" + values[0] \
+        + "," + values[1] \
+        + "," + values[2] + ")")
     generator = pydenticon.Generator(8, 8, foreground=colors)
     identicon = generator.generate(get_ipaddress(), height, width)
     return identicon

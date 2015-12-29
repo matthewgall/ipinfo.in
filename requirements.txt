@@ -2,3 +2,5 @@ bottle
 logentries
 pydenticon
 dicttoxml
+IPy
+nose2
