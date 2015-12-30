@@ -17,11 +17,11 @@ def get_ipaddress():
         and request.headers.get('X-Forwarded-For') == None:
             raise TypeError
         elif request.headers.get('Cf-Connecting-Ip') != None:
-            return IP(request.headers.get('Cf-Connecting-Ip'))
+            return str(IP(request.headers.get('Cf-Connecting-Ip')))
         else:
-            return IP(request.headers.get('X-Forwarded-For'))
+            return str(IP(request.headers.get('X-Forwarded-For')))
     except TypeError:
-        return IP(request.get('REMOTE_ADDR'))
+        return str(IP(request.get('REMOTE_ADDR')))
     except ValueError:
         return "Unable to determine IP address, or IP address provided was invalid"
 
