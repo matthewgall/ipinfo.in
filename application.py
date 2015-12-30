@@ -17,11 +17,13 @@ def get_ipaddress():
         and request.headers.get('X-Forwarded-For') == None:
             raise TypeError
         elif request.headers.get('Cf-Connecting-Ip') != None:
-            return request.headers.get('Cf-Connecting-Ip')
+            return IP(request.headers.get('Cf-Connecting-Ip'))
         else:
-            return request.headers.get('X-Forwarded-For')
+            return IP(request.headers.get('X-Forwarded-For'))
     except TypeError:
-        return request.get('REMOTE_ADDR')
+        return IP(request.get('REMOTE_ADDR'))
+    except ValueError:
+        return "Unable to determine IP address, or IP address provided was invalid"
 
 def get_reverse_host():
     """Return the reverse hostname of the IP address to the calling function."""
