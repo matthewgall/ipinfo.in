@@ -137,7 +137,7 @@ def headers():
 @route('/headers/<key>')
 def get_header(key):
     response.content_type = 'text/plain'
-    return request.headers.get(key)
+    return request.headers.get(key, "Not found")
 
 @route('/reverse')
 @route('/reverse.json')
