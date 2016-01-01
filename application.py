@@ -41,7 +41,6 @@ def add_headers():
     """Added a set of headers to all responses from the application."""
     response.set_header('X-Contact', 'themaster@ipinfo.in')
 
-@hook('after_request')
 def build_content_response(content, plain_content):
     """Builds a content response."""
     # And define a default dictionary
@@ -62,7 +61,7 @@ def is_xml_response():
         response.content_type = 'application/xml'
         return True
 
-@route('favicon.ico')
+@route('/favicon.ico')
 def return_favicon():
     response.status = 200
     return ''
