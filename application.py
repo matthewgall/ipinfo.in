@@ -134,6 +134,11 @@ def headers():
         response.content_type = 'text/plain'
         return content
 
+@route('/headers/<key>')
+def get_header(key):
+    response.content_type = 'text/plain'
+    return request.headers.get(key)
+
 @route('/reverse')
 @route('/reverse.json')
 @route('/reverse.xml')
