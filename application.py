@@ -129,9 +129,9 @@ def headers():
     else:
         content = ""
         for key in get_request_headers():
-            content = content + "<strong>" + key + "</strong>: " \
-                + str(request.headers.get(key)) + "</br>"
-        response.content_type = 'text/html'
+            content = content + key + " = " \
+                + str(request.headers.get(key)) + "\r\n"
+        response.content_type = 'text/plain'
         return content
 
 @route('/reverse')
