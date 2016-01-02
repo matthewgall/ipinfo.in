@@ -63,7 +63,6 @@ def is_xml_response():
 
 @route('/favicon.ico')
 def return_favicon():
-    response.status = 200
     return ''
 
 @route('/version')
@@ -116,16 +115,15 @@ def return_headers():
     }
     for key in get_request_headers():
         content["results"][key] = request.headers.get(key)
+
     if is_json_response():
         return json.dumps(content)
     if is_xml_response():
         return dicttoxml(content)
     else:
-        content = ""
-        for key in get_request_headers():
-            content = content + key + " = " \
-                + str(request.headers.get(key)) + "\r\n"
         response.content_type = 'text/plain'
+        results = ["%s = %s \r\n" % (key, str(request.headers.get(key))) for key in get_request_headers()]
+        content = "".join(results)
         return content
 
 @route('/headers/<key>')
