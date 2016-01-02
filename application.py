@@ -66,14 +66,8 @@ def return_favicon():
     response.status = 200
     return ''
 
-@error(404)
-def error_404(error):
-    response.status = 404
-    response.content_type = 'text/plain'
-    return 'Nothing here, sorry'
-
 @route('/version')
-def get_version():
+def return_version():
     try:
         dirname, filename = os.path.split(os.path.abspath(__file__))
         del filename
@@ -87,7 +81,7 @@ def get_version():
 @route('/icon')
 @route('/icon/<height:int>')
 @route('/icon/<height:int>/<width:int>')
-def get_icon(height=100, width=100):
+def return_icon(height=100, width=100):
     response.content_type = 'image/png'
     address = IP(get_ipaddress())
     values = []
@@ -116,7 +110,7 @@ def get_icon(height=100, width=100):
 @route('/headers')
 @route('/headers.json')
 @route('/headers.xml')
-def headers():
+def return_headers():
     content = {
         "results": {}
     }
@@ -135,14 +129,14 @@ def headers():
         return content
 
 @route('/headers/<key>')
-def get_header(key):
+def return_header(key):
     response.content_type = 'text/plain'
     return request.headers.get(key, "Not found")
 
 @route('/reverse')
 @route('/reverse.json')
 @route('/reverse.xml')
-def reverse():
+def return_reverse():
     content = {
         "results": {
             'reverse': get_reverse_host()
@@ -160,7 +154,7 @@ def reverse():
 @route('/ip')
 @route('/ip.json')
 @route('/ip.xml')
-def ip():
+def return_ip():
     content = {
         "results": {
             'ip': get_ipaddress()
@@ -173,6 +167,12 @@ def ip():
     else:
         response.content_type = 'text/plain'
         return get_ipaddress()
+
+@error(404)
+def error_404(error):
+    response.status = 404
+    response.content_type = 'text/plain'
+    return 'Nothing here, sorry'
 
 if __name__ == '__main__':
 
