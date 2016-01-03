@@ -17,13 +17,13 @@ Honestly, that simple (and none of that one line wget direct to your terminal)
 ## Features
 ### /ip
 
-### /headers/<name>
+### /headers/`name`
 
 ### /reverse
 
-### /icon/<width>/<height>
+### /icon/`width`/`height`
 Returns a icon representation of the currently connected IP address. The colour and pattern is customised.
-width and height are optional parameters, representing the desired height and width in pixels
+`width` and `height` are optional parameters, representing the desired height and width in pixels
 
     $ curl https://ipinfo.in/icon
     <png data follows as output>
