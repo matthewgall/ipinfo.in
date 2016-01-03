@@ -14,6 +14,19 @@ Deploying ipinfo.in is easy using Docker:
 
 Honestly, that simple (and none of that one line wget direct to your terminal)
 
+## Features
+### /ip
+
+### /headers
+
+### /headers/<name>
+
+### /reverse
+
+### /icon
+
+### /version
+
 ## Licence
 
     The MIT License (MIT)
