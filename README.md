@@ -12,6 +12,10 @@ Deploying ipinfo.in is easy using Docker:
 
     docker run -p 80:5000 matthewgall/ipinfo.in
 
+Or via my quay.io mirror:
+
+    docker run -p 80:5000 quay.io/matthewgall/ipinfo.in
+
 Honestly, that simple (and none of that one line wget direct to your terminal)
 
 ## Features
