@@ -52,10 +52,6 @@ def determine_content_type():
     else:
         response.content_type = 'text/plain'
 
-@route('/favicon.ico')
-def return_favicon():
-    return ''
-
 @route('/version')
 def return_version():
     try:
@@ -154,6 +150,7 @@ def return_ip():
     else:
         return get_ipaddress()
 
+@route('/favicon.ico')
 @error(404)
 def error_404(error):
     response.status = 404
