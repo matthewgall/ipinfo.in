@@ -152,10 +152,10 @@ def return_ip():
 
 @route('/favicon.ico')
 @error(404)
-def error_404(error):
+def error_404():
     response.status = 404
     response.content_type = 'text/plain'
-    return 'Nothing here, sorry'
+    return 'Not Found'
 
 if __name__ == '__main__':
 
