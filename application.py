@@ -154,7 +154,6 @@ def return_ip():
 @error(404)
 def error_404():
     response.status = 404
-    response.content_type = 'text/plain'
     return 'Not Found'
 
 if __name__ == '__main__':
