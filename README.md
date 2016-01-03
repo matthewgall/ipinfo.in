@@ -17,15 +17,23 @@ Honestly, that simple (and none of that one line wget direct to your terminal)
 ## Features
 ### /ip
 
-### /headers
-
 ### /headers/<name>
 
 ### /reverse
 
-### /icon
+### /icon/<width>/<height>
+Returns a icon representation of the currently connected IP address. The colour and pattern is customised.
+width and height are optional parameters, representing the desired height and width in pixels
+
+    $ curl https://ipinfo.in/icon
+    <png data follows as output>
 
 ### /version
+Returns the current running version of ipinfo.in from the released commit hash
+
+    $ curl https://ipinfo.in/version
+    a54fda84993b524288b9597131f8d3aec3945e06
+
 
 ## Licence
 
