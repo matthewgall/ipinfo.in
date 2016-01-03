@@ -41,25 +41,16 @@ def add_headers():
     """Added a set of headers to all responses from the application."""
     response.set_header('X-Contact', 'themaster@ipinfo.in')
 
-def build_content_response(content, plain_content):
-    """Builds a content response."""
-    # And define a default dictionary
-    content = {
-        "results": ""
-    }
-    return content
-
-def is_json_response():
+@hook('before_request')
+def determine_content_type():
     if request.headers.get('Accept') == "application/json" \
     or request.path.endswith('.json'):
-        response.content_type = 'application/json'
-        return True
-
-def is_xml_response():
-    if request.headers.get('Accept') == "application/xml" \
+        response.content_type = 'application/json'    
+    elif request.headers.get('Accept') == "application/xml" \
     or request.path.endswith('.xml'):
         response.content_type = 'application/xml'
-        return True
+    else:
+        response.content_type = 'text/plain'
 
 @route('/favicon.ico')
 def return_favicon():
@@ -116,12 +107,11 @@ def return_headers():
     for key in get_request_headers():
         content["results"][key] = request.headers.get(key)
 
-    if is_json_response():
+    if response.content_type == 'application/json':
         return json.dumps(content)
-    if is_xml_response():
+    elif response.content_type == 'application/xml':
         return dicttoxml(content)
     else:
-        response.content_type = 'text/plain'
         results = ["%s = %s \r\n" % (key, str(request.headers.get(key))) for key in get_request_headers()]
         content = "".join(results)
         return content
@@ -140,12 +130,11 @@ def return_reverse():
             'reverse': get_reverse_host()
         }
     }
-    if is_json_response():
+    if response.content_type == 'application/json':
         return json.dumps(content)
-    elif is_xml_response():
+    elif response.content_type == 'application/xml':
         return dicttoxml(content)
     else:
-        response.content_type = 'text/plain'
         return get_reverse_host()
 
 @route('/')
@@ -158,12 +147,11 @@ def return_ip():
             'ip': get_ipaddress()
         }
     }
-    if is_json_response():
+    if response.content_type == 'application/json':
         return json.dumps(content)
-    elif is_xml_response():
+    elif response.content_type == 'application/xml':
         return dicttoxml(content)
     else:
-        response.content_type = 'text/plain'
         return get_ipaddress()
 
 @error(404)
