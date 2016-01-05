@@ -109,7 +109,7 @@ def return_headers():
     if response.content_type == 'application/json':
         return json.dumps(content)
     elif response.content_type == 'application/xml':
-        return dicttoxml(content)
+        return '<?xml version="1.0"?>' + dicttoxml(content, attr_type=False, root=False)
     else:
         results = ["%s = %s \r\n" % (key, str(request.headers.get(key))) for key in get_request_headers()]
         content = "".join(results)
@@ -132,7 +132,7 @@ def return_reverse():
     if response.content_type == 'application/json':
         return json.dumps(content)
     elif response.content_type == 'application/xml':
-        return dicttoxml(content)
+        return '<?xml version="1.0"?>' + dicttoxml(content, attr_type=False, root=False)
     else:
         return get_reverse_host()
 
@@ -149,7 +149,7 @@ def return_ip():
     if response.content_type == 'application/json':
         return json.dumps(content)
     elif response.content_type == 'application/xml':
-        return dicttoxml(content)
+        return '<?xml version="1.0"?>' + dicttoxml(content, attr_type=False, root=False)
     else:
         return get_ipaddress()
 
