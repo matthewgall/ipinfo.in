@@ -20,6 +20,10 @@ Honestly, that simple (and none of that one line wget direct to your terminal)
 
 ## Features
 ### /ip
+Returns the IP address of the visitor to the browser.
+
+    $ curl https://ipinfo.in/ip
+    127.0.0.1
 
 ### /headers/`name`
 Returns either a list of headers made for the request to the instance, or if `name` is specified, then the value of the individual header is provided.
@@ -34,6 +38,10 @@ Returns either a list of headers made for the request to the instance, or if `na
     curl/7.43.0
 
 ### /reverse
+Returns the results of a reverse PTR lookup against the visiting IP address or the IP address if a PTR record cannot be found.
+
+    $ curl https://ipinfo.in/reverse
+    localhost
 
 ### /icon/`width`/`height`
 Returns a icon representation of the currently connected IP address. The colour and pattern is customised.
