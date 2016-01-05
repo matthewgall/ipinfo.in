@@ -22,6 +22,16 @@ Honestly, that simple (and none of that one line wget direct to your terminal)
 ### /ip
 
 ### /headers/`name`
+Returns either a list of headers made for the request to the instance, or if `name` is specified, then the value of the individual header is provided.
+
+    $ curl https://ipinfo.in/headers
+    Content-Length =  
+    User-Agent = curl/7.43.0 
+    Connection = close 
+    X-Forwarded-Proto = https 
+
+    $ curl https://ipinfo.in/headers/User-Agent
+    curl/7.43.0
 
 ### /reverse
 
