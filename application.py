@@ -101,7 +101,10 @@ def return_headers():
         "results": {}
     }
     for key in get_request_headers():
-        content["results"][key] = request.headers.get(key)
+        if "User-Agent" in key or ',' not in request.headers.get(key):
+            content["results"][key] = request.headers.get(key)
+        else:
+            content["results"][key] = request.headers.get(key).replace(" ", "").split(',')
 
     if response.content_type == 'application/json':
         return json.dumps(content)
