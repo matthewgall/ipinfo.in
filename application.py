@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 
-import os
-import json
-import socket
-import logging
+import os, socket, json, logging
 from bottle import route, request, response, error, hook, default_app
 from logentries import LogentriesHandler
 from dicttoxml import dicttoxml
@@ -163,8 +160,8 @@ if __name__ == '__main__':
 
     app = default_app()
 
-    serverHost = os.getenv('SERVER_HOST', 'localhost')
-    serverPort = os.getenv('SERVER_PORT', '5000')
+    serverHost = os.getenv('HOST', 'localhost')
+    serverPort = os.getenv('PORT', '5000')
 
     # Now we're ready, so start the server
     # Instantiate the logger
@@ -178,7 +175,6 @@ if __name__ == '__main__':
 
     # Now we're ready, so start the server
     try:
-        log.info("Successfully started application server on " + socket.gethostname())
-        app.run(host=serverHost, port=serverPort)
+        app.run(host=serverHost, port=serverPort, server="cherrypy")
     except:
-        log.info("Failed to start application server on " + socket.gethostname())
+        log.info("Failed to start application server")

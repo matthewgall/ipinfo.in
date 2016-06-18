@@ -4,3 +4,4 @@ pydenticon
 dicttoxml
 IPy
 nose2
+cherrypy
