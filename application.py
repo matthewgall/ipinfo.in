@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, socket, json, logging
+import os, socket, json, logging, datetime
 from bottle import route, request, response, error, hook, default_app
 from logentries import LogentriesHandler
 from dicttoxml import dicttoxml
@@ -34,7 +34,13 @@ def get_request_headers():
     return request.headers.keys()
 
 @hook('after_request')
-def add_headers():
+def add_headers_and_log():
+    log.info("{} {} {}".format(
+        datetime.datetime.now(),
+        response.status_code,
+        request.url
+    ))
+    
     """Added a set of headers to all responses from the application."""
     response.set_header('X-Contact', 'themaster@ipinfo.in')
 
@@ -160,7 +166,7 @@ if __name__ == '__main__':
 
     app = default_app()
 
-    serverHost = os.getenv('HOST', 'localhost')
+    serverHost = os.getenv('IP', 'localhost')
     serverPort = os.getenv('PORT', '5000')
 
     # Now we're ready, so start the server
