@@ -176,8 +176,8 @@ if __name__ == '__main__':
     log.setLevel(logging.INFO)
     log.addHandler(console)
 
-    if os.getenv('LOGENTRIES_TOKEN') == '':
-        log.addHandler(LogentriesHandler(os.getenv('LOGENTRIES_TOKEN', '')))
+    if not os.getenv('LOGENTRIES_TOKEN', '') is '':
+        log.addHandler(LogentriesHandler(os.getenv('LOGENTRIES_TOKEN')))
 
     # Now we're ready, so start the server
     try:
