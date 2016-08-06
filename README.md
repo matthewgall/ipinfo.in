@@ -1,6 +1,6 @@
 # ipinfo.in
 
-![](https://badge.imagelayers.io/matthewgall/ipinfo.in:latest.svg) [![Docker Repository on Quay](https://quay.io/repository/matthewgall/ipinfo.in/status "Docker Repository on Quay")](https://quay.io/repository/matthewgall/ipinfo.in)
+[![](https://images.microbadger.com/badges/image/matthewgall/ipinfo.in.svg)](https://microbadger.com/images/matthewgall/ipinfo.in "Get your own image badge on microbadger.com") [![Docker Repository on Quay](https://quay.io/repository/matthewgall/ipinfo.in/status "Docker Repository on Quay")](https://quay.io/repository/matthewgall/ipinfo.in)
 
 Ever wanted to run your own IP lookup service like [canhazip.com](http://canhazip.com), [ifconfig.me](http://ifconfig.me) or [myip.dnsomatic.com](http://myip.dnsomatic.com) but without the annoying PHP? Something easy to deploy, and lightening fast!
 
