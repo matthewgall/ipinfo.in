@@ -9,6 +9,9 @@ RUN apk add --update \
 	py-virtualenv \
 	openssl-dev \
 	libffi-dev \
+	libjpeg-turbo \
+	zlib \
+	zlib-dev \
 	&& rm -rf /var/cache/apk/*
 
 WORKDIR /app
