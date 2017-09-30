@@ -1,0 +1,14 @@
+# This configuration file is for **development** setup. For production, refer to
+# docker-compose.production.yml.
+version: '3'
+services:
+  app:
+    build: .
+    command: /env/bin/python3 /app/app.py
+    depends_on:
+      - redis
+    ports:
+      - "80:5000"
+      - "5000:5000"
+    environment:
+      IP: "0.0.0.0"
