@@ -10,6 +10,7 @@ RUN apk add --update \
 	openssl-dev \
 	libffi-dev \
 	libjpeg-turbo \
+	libjpeg-turbo-dev \
 	zlib \
 	zlib-dev \
 	&& rm -rf /var/cache/apk/*
