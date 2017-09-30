@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import os, socket, json, logging, datetime
+import os, socket, json, logging, datetime, argparse
 from bottle import route, request, response, error, hook, default_app
 from logentries import LogentriesHandler
 from dicttoxml import dicttoxml
@@ -33,29 +33,40 @@ def get_request_headers():
 	"""Return an array of headers used to make the request to the calling function."""
 	return request.headers.keys()
 
-@hook('after_request')
-def add_headers_and_log():
-	log.info("{} {} {}".format(
-		datetime.datetime.now(),
-		response.status_code,
-		request.url
-	))
-	
-	"""Added a set of headers to all responses from the application."""
-	response.set_header('X-Contact', 'themaster@ipinfo.in')
+def set_content_type(fn):
+	def _return_type(*args, **kwargs):
+		if request.headers.get('Accept') == "application/json":
+			response.headers['Content-Type'] = 'application/json'
+			return True
+		if request.path.endswith('.json'):
+			response.headers['Content-Type'] = 'application/json'
+			return True
+		if request.headers.get('Accept') == "application/xml":
+			response.headers['Content-Type'] = 'application/xml'
+			return True
+		if request.path.endswith('.xml'):
+			response.headers['Content-Type'] = 'application/xml'
+			return True
 
-@hook('before_request')
-def determine_content_type():
-	if request.headers.get('Accept') == "application/json" \
-	or request.path.endswith('.json'):
-		response.content_type = 'application/json'    
-	elif request.headers.get('Accept') == "application/xml" \
-	or request.path.endswith('.xml'):
-		response.content_type = 'application/xml'
-	else:
-		response.content_type = 'text/plain'
+		response.headers['Content-Type'] = 'text/plain'
+
+		if request.method != 'OPTIONS':
+			return fn(*args, **kwargs)
+	return _return_type
+
+def enable_cors(fn):
+	def _enable_cors(*args, **kwargs):
+		response.headers['Access-Control-Allow-Origin'] = '*'
+		response.headers['Access-Control-Allow-Methods'] = 'GET, POST, PUT, OPTIONS'
+		response.headers['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, X-Requested-With, X-CSRF-Token'
+
+		if request.method != 'OPTIONS':
+			return fn(*args, **kwargs)
+	return _enable_cors
 
 @route('/version')
+@enable_cors
+@set_content_type
 def return_version():
 	try:
 		dirname, filename = os.path.split(os.path.abspath(__file__))
@@ -99,6 +110,8 @@ def return_icon(height=100, width=100):
 @route('/headers')
 @route('/headers.json')
 @route('/headers.xml')
+@enable_cors
+@set_content_type
 def return_headers():
 	content = {
 		"results": {}
@@ -112,13 +125,14 @@ def return_headers():
 	if response.content_type == 'application/json':
 		return json.dumps(content)
 	elif response.content_type == 'application/xml':
-		return '<?xml version="1.0"?>' + dicttoxml(content, attr_type=False, root=False)
+		return '<?xml version="1.0"?>{}'.format(dicttoxml(content, attr_type=False, root=False).decode('utf-8'))
 	else:
 		results = ["%s = %s \r\n" % (key, str(request.headers.get(key))) for key in get_request_headers()]
 		content = "".join(results)
 		return content
 
 @route('/headers/<key>')
+@enable_cors
 def return_header(key):
 	response.content_type = 'text/plain'
 	return request.headers.get(key, "Not found")
@@ -126,6 +140,8 @@ def return_header(key):
 @route('/reverse')
 @route('/reverse.json')
 @route('/reverse.xml')
+@enable_cors
+@set_content_type
 def return_reverse():
 	content = {
 		"results": {
@@ -135,7 +151,7 @@ def return_reverse():
 	if response.content_type == 'application/json':
 		return json.dumps(content)
 	elif response.content_type == 'application/xml':
-		return '<?xml version="1.0"?>' + dicttoxml(content, attr_type=False, root=False)
+		return '<?xml version="1.0"?>{}'.format(dicttoxml(content, attr_type=False, root=False).decode('utf-8'))
 	else:
 		return get_reverse_host()
 
@@ -143,6 +159,8 @@ def return_reverse():
 @route('/ip')
 @route('/ip.json')
 @route('/ip.xml')
+@enable_cors
+@set_content_type
 def return_ip():
 	content = {
 		"results": {
@@ -152,7 +170,7 @@ def return_ip():
 	if response.content_type == 'application/json':
 		return json.dumps(content)
 	elif response.content_type == 'application/xml':
-		return '<?xml version="1.0"?>' + dicttoxml(content, attr_type=False, root=False)
+		return '<?xml version="1.0"?>{}'.format(dicttoxml(content, attr_type=False, root=False).decode('utf-8'))
 	else:
 		return get_ipaddress()
 
