@@ -1,16 +1,20 @@
-FROM matthewgall/python-dev:latest
+FROM alpine:latest
+MAINTAINER Matthew Gall <docker@matthewgall.com>
+
 RUN apk add --update \
-	zlib-dev \
-	libjpeg-turbo-dev \
-	libpng-dev \
-	&& rm -rf /var/cache/apk/* \
-	&& ln -s /lib/libz.a /usr/lib/libz.a \
-	&& ln -s /lib/libz.so /usr/lib/libz.so
+	build-base \
+	python3 \
+	python3-dev \
+	py-pip \
+	py-virtualenv \
+	openssl-dev \
+	libffi-dev \
+	&& rm -rf /var/cache/apk/*
 
 WORKDIR /app
-
 COPY . /app
-RUN virtualenv /env && /env/bin/pip install -r /app/requirements.txt
+
+RUN virtualenv -p python3 /env && /env/bin/pip install -r /app/requirements.txt
 
 EXPOSE 5000
-CMD ["/env/bin/python", "application.py"]
+CMD ["/env/bin/python3", "app.py"]
